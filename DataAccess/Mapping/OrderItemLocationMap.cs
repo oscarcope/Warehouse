@@ -9,7 +9,7 @@ namespace DataAccess.Mapping
         // Configure with schema overload
         public void Configure(EntityTypeBuilder<OrderItemLocation> builder, string schema)
         {
-            builder.ToTable("OrderItemLocation", schema);
+            builder.ToTable("OrderItemLocations", schema);
 
             // Primary key
             builder.HasKey(oil => oil.OrderItemLocationId).HasName("PK_OrderItemLocation");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Entities;
 
-public partial class Order
+public class Order
 {
     public int OrderId { get; set; }
 

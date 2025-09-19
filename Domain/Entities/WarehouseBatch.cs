@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace Domain.Entities;
 
-public partial class WarehouseBatch
+public class WarehouseBatch
 {
     public int WarehouseBatchId { get; set; }
 
     public int BatchId { get; set; }
 
     public int LocationId { get; set; }
+
+    public int Quantity { get; set; }
 
     public virtual Batch Batch { get; set; } = null!;
 

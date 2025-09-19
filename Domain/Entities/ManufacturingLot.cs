@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Entities;
 
-public partial class ManufacturingLot
+public class ManufacturingLot
 {
     public int ManufacturingLotId { get; set; }
 

@@ -6,21 +6,29 @@ namespace DataAccess.Mapping
 {
     public class WarehouseBatchMap : IEntityTypeConfiguration<WarehouseBatch>
     {
-        // Configure with schema overload
         public void Configure(EntityTypeBuilder<WarehouseBatch> builder, string schema)
         {
             builder.ToTable("WarehouseBatch", schema);
 
-            // Primary key
             builder.HasKey(wb => wb.WarehouseBatchId).HasName("PK_WarehouseBatch");
 
-            // Columns
             builder.Property(wb => wb.WarehouseBatchId).HasColumnName("WarehouseBatchID");
             builder.Property(wb => wb.BatchId).HasColumnName("BatchID").IsRequired();
             builder.Property(wb => wb.LocationId).HasColumnName("LocationID").IsRequired();
+            builder.Property(wb => wb.Quantity).IsRequired();
+
+            builder.HasOne(wb => wb.Batch)
+                   .WithMany(b => b.WarehouseBatches)
+                   .HasForeignKey(wb => wb.BatchId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(wb => wb.Location)
+                   .WithMany(l => l.WarehouseBatches)
+                   .HasForeignKey(wb => wb.LocationId)
+                   .HasPrincipalKey(l => l.LocationId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
 
-        // Default Configure method calls the schema overload with "dbo"
         public void Configure(EntityTypeBuilder<WarehouseBatch> builder)
         {
             Configure(builder, "dbo");

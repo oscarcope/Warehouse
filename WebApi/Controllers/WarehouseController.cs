@@ -9,10 +9,12 @@ namespace WebApi.Controllers
     public class WarehouseController : ControllerBase
     {
         private readonly IGetOrders _orderGetter;
+        private readonly IBatchMover _batchMover;
 
-        public WarehouseController(IGetOrders orderGetter)
+        public WarehouseController(IGetOrders orderGetter, IBatchMover batchMover)
         {
             _orderGetter = orderGetter;
+            _batchMover = batchMover;
         }
 
         [HttpGet("{orderId}")]
@@ -23,6 +25,23 @@ namespace WebApi.Controllers
                 return NotFound();
 
             return Ok(order);
+        }
+
+        [HttpPost("MoveBatch")]
+        public IActionResult MoveBatch([FromBody] MoveBatchDto dto)
+        {
+            if (dto == null)
+                return BadRequest();
+
+            try
+            {
+                _batchMover.MoveBatch(dto);
+                return Ok("Batch moved successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
