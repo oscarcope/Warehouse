@@ -24,9 +24,8 @@ namespace Application
         public void MoveBatch(MoveBatchDto dto)
         {
             if (dto.FromLocationId == dto.ToLocationId)
-                return; // Nothing to do
+                return;
 
-            // Get source warehouse batch
             var source = _warehouseBatchRepo
                 .Get(wb => wb.WarehouseBatchId == dto.WarehouseBatchId
                            && wb.LocationId == dto.FromLocationId)
@@ -37,7 +36,6 @@ namespace Application
 
             if (dto.Quantity == 0)
             {
-                // Create a new batch at the destination (without moving quantity)
                 var existing = _warehouseBatchRepo
                     .Get(wb => wb.BatchId == source.BatchId
                                && wb.LocationId == dto.ToLocationId)
@@ -50,14 +48,13 @@ namespace Application
                 {
                     BatchId = source.BatchId,
                     LocationId = dto.ToLocationId,
-                    Quantity = 0 // or leave as default
+                    Quantity = 0 
                 };
 
                 _warehouseBatchRepo.Insert(newBatch);
             }
             else
             {
-                // Move quantity from source to destination
                 if (dto.Quantity > source.Quantity)
                     throw new Exception("Not enough quantity at source location");
 
@@ -82,7 +79,6 @@ namespace Application
                     _warehouseBatchRepo.Update(destination);
                 }
 
-                // Subtract quantity from source
                 source.Quantity -= dto.Quantity;
                 _warehouseBatchRepo.Update(source);
             }

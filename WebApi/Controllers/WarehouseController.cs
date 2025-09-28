@@ -10,11 +10,16 @@ namespace WebApi.Controllers
     {
         private readonly IGetOrders _orderGetter;
         private readonly IBatchMover _batchMover;
+        private readonly IProductFinder _productFinder;
 
-        public WarehouseController(IGetOrders orderGetter, IBatchMover batchMover)
+        public WarehouseController(
+            IGetOrders orderGetter,
+            IBatchMover batchMover,
+            IProductFinder productFinder)
         {
             _orderGetter = orderGetter;
             _batchMover = batchMover;
+            _productFinder = productFinder;
         }
 
         [HttpGet("{orderId}")]
@@ -41,6 +46,20 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("OrderDetails/{orderId}")]
+        public ActionResult<OrderDetailsDTO> GetOrderDetails(int orderId)
+        {
+            try
+            {
+                var details = _productFinder.GetOrderDetails(orderId);
+                return Ok(details);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }

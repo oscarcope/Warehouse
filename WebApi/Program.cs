@@ -21,7 +21,8 @@ builder.Services.AddScoped<DbContext, WarehouseDbContext>()
     .AddTransient<IGenericRepository<Order>, GenericRepository<Order>>()
     .AddTransient<IGenericRepository<Batch>, GenericRepository<Batch>>()
     .AddTransient<IGetOrders, OrderGetter>()
-    .AddTransient<IBatchMover, BatchMover>();
+    .AddTransient<IBatchMover, BatchMover>()
+    .AddTransient<IProductFinder, ProductFinder>();
 
 
 
